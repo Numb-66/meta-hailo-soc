@@ -23,13 +23,13 @@ RDEPENDS:${PN}-base-dev = "\
     gdb \
     htop \
     lrzsz \
+    lsof \
     perf \
     stress-ng \
     sysstat \
     tmux \
     tree \
     tzdata \
-    ulimit \
     vim \
     valgrind \
     xauth \
@@ -226,4 +226,9 @@ RDEPENDS:${PN}-display-dev = "\
 RDEPENDS:${PN} = "${HAILO_LINUX_SUB_PACKAGEGROUPS}"
 RDEPENDS:${PN}-dev = "${PN} ${HAILO_LINUX_DEV_SUB_PACKAGEGROUPS}"
 
-PACKAGES = "${PN} ${PN}-dev ${HAILO_LINUX_SUB_PACKAGEGROUPS} ${HAILO_LINUX_DEV_SUB_PACKAGEGROUPS}"
+PACKAGES = "\
+    ${PN} \
+    ${HAILO_LINUX_SUB_PACKAGEGROUPS} \
+    ${PN}-dev \
+    ${HAILO_LINUX_DEV_SUB_PACKAGEGROUPS} \
+    "

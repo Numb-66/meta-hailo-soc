@@ -13,6 +13,7 @@ RDEPENDS:${PN} = "\
     imaging-sub-system"
 
 RDEPENDS:${PN}-dev-pkg = "\
+    packagegroup-hailo-imaging \
     imaging-sub-system-ext \
     qtbase"
 

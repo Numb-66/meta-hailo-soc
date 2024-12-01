@@ -7,7 +7,7 @@ inherit hailo-cc312-sign
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://../LICENSE;md5=263ee034adc02556d59ab1ebdaea2cda"
 
-BASE_URI = "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.5.1/scu-bl"
+BASE_URI = "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.5.2/scu-bl"
 BL = "hailo15_scu_bl.bin"
 BL_UNSIGNED = "${SCU_BL_UNSIGNED_BINARY_NAME}"
 BL_CUSTOMER_SIGNED = "${SCU_BL_CUSTOMER_SIGNED_BINARY_NAME}"
@@ -37,7 +37,7 @@ python() {
 }
 
 do_sign() {
-  if [ -n "${HAS_CUSTOMER_ROT_KEY}" ]; then
+  if [ -n "${HAS_CUSTOMER_ROOT_KEY}" ]; then
     hailo15_scu_firmware_sign ${WORKDIR}/${BL_UNSIGNED} ${WORKDIR}/${BL_CUSTOMER_SIGNED}
   fi
 }
@@ -59,7 +59,12 @@ do_install() {
 
 
 do_deploy() {
-  install -m 644 -D ${WORKDIR}/${BL} ${DEPLOYDIR}/${BL}
+  if [ -z "${HAS_CUSTOMER_ROOT_KEY}" ]; then
+    install -m 644 -D ${WORKDIR}/${BL} ${DEPLOYDIR}/${BL}
+  else
+    install -m 644 -D ${WORKDIR}/${BL_CUSTOMER_SIGNED} ${DEPLOYDIR}/${BL_CUSTOMER_SIGNED}
+    ln -s -r ${DEPLOYDIR}/${BL_CUSTOMER_SIGNED} ${DEPLOYDIR}/${BL}
+  fi
 
   # Install all the scu bl cfg binary files to the deploy directory
   for json in ${CONFIG_JSONS}; do

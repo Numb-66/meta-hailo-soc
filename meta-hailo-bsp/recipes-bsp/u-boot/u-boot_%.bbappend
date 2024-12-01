@@ -4,7 +4,7 @@ DEPENDS += "u-boot-mkenvimage-native"
 
 require u-boot-hailo.inc
 
-SPL_BINARY = "spl/u-boot-spl.bin"
+inherit hailo-cc312-sign
 
 SRC_URI:append = " file://fw_env.config"
 SRC_URI:append = "${@bb.utils.contains('MACHINE_FEATURES', 'ddr_ecc_en', ' file://cfg/hailo15_ddr_ecc_enable.cfg', '', d)}"
@@ -14,6 +14,8 @@ UBOOT_ENV_SIZE = "0x4000"
 
 do_compile:append() {
     uboot-mkenvimage -s ${UBOOT_ENV_SIZE} -o u-boot-initial-env.bin u-boot-initial-env
+    # sign u-boot-spl-nodtb.bin, generate u-boot-spl.bin
+    hailo15_boot_image_sign ${B}/${SPL_DIR}/${SPL_NODTB_BINARY} image ${B}/${SPL_DIR}/u-boot-spl.bin.signed
 }
 
 do_configure:append() {
@@ -27,8 +29,8 @@ do_install:append() {
 do_deploy:append() {
     install -m 0644 ${B}/u-boot-initial-env.bin ${DEPLOYDIR}/u-boot-initial-env.bin
 
-    # do not deploy SPL related binaries here, we do it in the u-boot-tfa-image recipe
+    # do not deploy default u-boot-spl files, only our signed dtb
     rm -f ${DEPLOYDIR}/u-boot-spl*
-
-    install -m 0644 ${B}/spl/u-boot-spl ${DEPLOYDIR}/u-boot-spl.elf
+    install -m 0644 ${B}/${SPL_DIR}/u-boot-spl.bin.signed ${DEPLOYDIR}/u-boot-spl.bin
+    install -m 0644 ${B}/${SPL_DIR}/u-boot-spl ${DEPLOYDIR}/u-boot-spl.elf
 }

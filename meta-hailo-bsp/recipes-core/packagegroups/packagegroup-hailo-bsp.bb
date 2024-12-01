@@ -10,6 +10,7 @@ PACKAGES = "${PN}"
 
 RDEPENDS:${PN} = "\
     ${@bb.utils.contains('MACHINE_FEATURES', 'disable_load_all_kernel_modules', '', ' kernel-modules', d)} \
+    hailo-dma-usage \
     recovery-fw \
     scu-bl \
     scu-fw"

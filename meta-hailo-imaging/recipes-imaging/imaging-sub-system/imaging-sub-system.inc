@@ -11,8 +11,36 @@ inherit ${INHERITS}
 RDEPENDS:${PN} += "${RDEPENDS_IMAGING_SUB_SYSTEM}"
 DEPENDS += "${DEPENDS_IMAGING_SUB_SYSTEM}"
 
-SRC_URI = "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.5.1/imaging-sub-system.tar.gz"
-SRC_URI[sha256sum] = "353df698b418950d055e46079d48588f3206a27bfdeefe977f116a16da8cfb91"
+# Note: external_releaser.py sets the following variables for us when releasing version
+# IMAGING_SRC_PATH, IMAGING_BINS_PATH, SRC_URI[bins.sha256sum]
+# Variable controlling which branch/binary to fetch, being modified by external_releaser.py
+IMAGING_SRC_PATH = "git://git@github.com/hailo-ai/hailo-vision.git;protocol=https;branch=1.5.2"
+IMAGING_BINS_PATH = "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.5.2/imaging-sub-system.tar.gz"
+
+# We have 2 URIs: "bins" for our binaries (S3), "source" for source code (github)
+SRC_URI = "${IMAGING_BINS_PATH};name=bins \
+		${IMAGING_SRC_PATH};name=source"
+
+# Hash of binaries and hash of fetched commits
+SRC_URI[bins.sha256sum] = "9931f3187ffe7c8198ed2c0f0cddb2818961cb1e965e8c172fca40aa83cf923d"
+
+# Specify the commit hash of imaging repo - filled and uncommented by external_releaser
+SRCREV:pn-imaging-sub-system = "027932c355606f0167c0ffac545f617a22c9534c"
+SRCREV:pn-imaging-sub-system-ext = "027932c355606f0167c0ffac545f617a22c9534c"
 
 B = "${WORKDIR}/imaging-sub-system/build"
 S = "${WORKDIR}/imaging-sub-system/scripts"
+
+# Path to github clone of source files
+SRC_GIT="${WORKDIR}/git"
+
+PACKAGES = "${PN} ${PN}-dev"
+INSANE_SKIP:${PN}-dev =  "file-rpaths dev-so debug-files rpaths staticdev installed-vs-shipped"
+INSANE_SKIP:${PN} =  "file-rpaths dev-so debug-files rpaths staticdev installed-vs-shipped"
+
+# FIXME: why? arch? 
+do_package_qa[noexec] = "1"
+EXCLUDE_FROM_SHLIBS = "1"
+
+FILES:${PN}     += "/lib/* /lib/*/*"
+FILES:${PN}     += "${bindir}/*"

@@ -3,14 +3,14 @@ SECTION = "kernel"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
-inherit deploy hailo-cc312-sign
+inherit deploy hailo-cc312-sign hailo-common-utils
 
 LINUX_VERSION = "5.15.32"
 PV = "${LINUX_VERSION}"
 
 LINUX_YOCTO_HAILO_URI ??= "git@github.com/hailo-ai/linux-yocto-hailo.git"
-LINUX_YOCTO_HAILO_BRANCH ??= "1.5.1"
-LINUX_YOCTO_HAILO_SRCREV ??= "385928f1099405c9651aa4d9089378907a2b00fc"
+LINUX_YOCTO_HAILO_BRANCH ??= "1.5.2"
+LINUX_YOCTO_HAILO_SRCREV ??= "a89e659c54d1d5695999b7de03df28681078c645"
 LINUX_YOCTO_HAILO_BOARD_VENDOR ?= "hailo"
 
 KBRANCH = "${LINUX_YOCTO_HAILO_BRANCH}"
@@ -24,6 +24,7 @@ SRC_URI = "git://${LINUX_YOCTO_HAILO_URI};protocol=https;branch=${KBRANCH} \
 SRC_URI:append = "${@bb.utils.contains('MACHINE_FEATURES', 'kernel_debug_en', ' file://cfg/debug-configuration.cfg', '', d)}"
 SRC_URI:append = "${@bb.utils.contains('MACHINE_FEATURES', 'dma_zone_disable', ' file://cfg/dma-zone-disable.cfg', '', d)}"
 SRC_URI:append:hailo10-m2 = " file://cfg/dma-zone-disable.cfg"
+SRC_URI:append:veloce = " file://cfg/veloce.cfg"
 
 SDIO0_POSTFIX = "${@bb.utils.contains('MACHINE_FEATURES', 'sdio0', '-sdio0', '', d)}"
 KERNEL_DEVICETREE ?= "${LINUX_YOCTO_HAILO_BOARD_VENDOR}/${MACHINE}${SDIO0_POSTFIX}.dtb"
@@ -46,3 +47,55 @@ kernel_do_deploy:append() {
 require recipes-kernel/linux/linux-yocto.inc
 
 RRECOMMENDS:${KERNEL_PACKAGE_NAME}-base = ""
+
+do_assemble_fitimage[depends] += "${@bb.utils.contains('MACHINE_FEATURES', 'falcon_mode', ' trusted-firmware-a-hailo:do_deploy', '', d)}"
+
+fitimage_emit_section_config:append() {
+    if [ "${@bb.utils.contains("MACHINE_FEATURES", "falcon_mode", "1", "0", d)}" = "1" ]; then
+        # add ATF to the list of images being signed
+        sign_line_w_atf=$(echo $sign_line | sed -e "s/;/,\"firmware\";/g")
+        # replace sign line with the new one
+        sed -e "s/${sign_line}/${sign_line_w_atf}/g" -i $its_file
+
+        # add ATF to to the configuration
+        firmware_line='firmware = "atf";'
+        loadables_line="loadables = \"fdt-$dtb_image\", \"kernel-$kernel_id\";"
+        sed -e "s/${kernel_line}/${kernel_line}\n${firmware_line}\n${loadables_line}/g" -i $its_file
+    fi
+}
+
+fitimage_emit_section_dtb:prepend() {
+    # make sure DTB file is aligned to 64 bytes
+    align_file $3 64
+}
+
+fitimage_emit_section_kernel:append() {
+    if [ "${@bb.utils.contains("MACHINE_FEATURES", "falcon_mode", "1", "0", d)}" = "1" ]; then
+        its_file=$1
+
+        rm -f ${B}/bl31.bin
+        cp ${DEPLOY_DIR_IMAGE}/bl31.bin ${B}/bl31.bin
+        align_file ${B}/bl31.bin 64
+
+        cat << EOF >> $its_file
+                atf {
+                        description = "ARM TrustedFirmware-A";
+                        data = /incbin/("bl31.bin");
+                        type = "firmware";
+                        os = "arm-trusted-firmware";
+                        arch = "${UBOOT_ARCH}";
+                        compression = "none";
+                        load = <0x80000000>;
+                        entry = <0x80000000>;
+                        hash-1 {
+                                algo = "$kernel_csum";
+                        };
+                    };
+EOF
+    fi
+}
+
+uboot_prep_kimage:append() {
+    # make sure linux.bin is alligned to 64 bytes
+    align_file linux.bin 64
+}

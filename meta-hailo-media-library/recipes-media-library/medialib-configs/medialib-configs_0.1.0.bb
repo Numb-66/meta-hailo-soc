@@ -6,9 +6,9 @@ RESOURCES_DIR = "${S}/resources"
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://${RESOURCES_DIR}/sensors/LICENSE;md5=263ee034adc02556d59ab1ebdaea2cda"
 
-SRC_URI = "git://git@github.com/hailo-ai/hailo-media-library.git;protocol=https;branch=1.5.1"
-SRC_URI += "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.5.1/hefs.tar.gz;name=hefs"
-SRCREV = "ed235d6f7418e11a9e39c5c3d3ba044235c60e42"
+SRC_URI = "git://git@github.com/hailo-ai/hailo-media-library.git;protocol=https;branch=1.5.2"
+SRC_URI += "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.5.2/hefs.tar.gz;name=hefs"
+SRCREV = "f0f6e199bc5613caf13bda7112e271d08df3a22d"
 SRC_URI[hefs.sha256sum] = "479345ba63e0da7c6653837600620ad1495c2331b2ebf35b59085abf4790cfa9"
 
 HEFS_DIR = "${WORKDIR}/hefs"

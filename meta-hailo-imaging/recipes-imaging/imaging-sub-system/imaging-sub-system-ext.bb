@@ -6,15 +6,10 @@ INHERITS += " qmake5_paths"
 RDEPENDS_IMAGING_SUB_SYSTEM += " qtmultimedia"
 DEPENDS_IMAGING_SUB_SYSTEM += " qtbase-native ninja-native bash cmake-native qwt-qt5 qtbase qtdeclarative qtmultimedia qmllive boost"
 
-inherit imaging-sub-system-base
-
-install_isp_media_server:prepend() {
+install_dist() {
 	install -m 0755 -D  ${B}/dist/bin/tuning-server ${D}${bindir}
 	install -m 0755 -D  ${B}/dist/bin/tuning-lite ${D}${bindir}
 	install -m 0755 -D  ${B}/dist/bin/tuning-yuv-capture ${D}${bindir}
-}
-
-install_dist:append() {
 	install -m 0755 -D  ${B}/dist/bin/v4l_stream_example ${D}${bindir}
 	install -m 0755 -D  ${B}/dist/bin/fe-read-reg ${D}${bindir}
 	install -m 0755 -D  ${B}/dist/bin/v4l_ctrl_example ${D}${bindir}
@@ -24,7 +19,7 @@ install_dist:append() {
     install -m 0755 -D  ${B}/dist/bin/v4l_event_handling_example ${D}${bindir}
 }
 
-install_misc:append() {
+install_misc() {
 	install -d ${D}${includedir}/imaging/cam_device
 	install -d ${D}${includedir}/imaging/ebase
 	install -d ${D}${includedir}/imaging/scmi
@@ -75,4 +70,11 @@ install_misc:append() {
 	cp ${S}/units/fpga/fpga/include/* ${D}${includedir}/imaging/fpga
 	cp ${S}/units/isi/include/* ${D}${includedir}/imaging/isi
 	cp ${S}/units/cameric_drv/include/cameric_drv_common.h ${D}${includedir}/imaging/cameric_drv
+}
+
+do_install() {
+	install -d ${D}${bindir}
+
+    install_dist
+	install_misc
 }

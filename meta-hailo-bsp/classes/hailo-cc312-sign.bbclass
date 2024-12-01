@@ -8,7 +8,7 @@ DEPENDS += "hailo-secureboot-scripts-native"
 DEPENDS += "gettext-native"
 
 CERT_KEYPAIR ?= "${DEPLOY_DIR_IMAGE}/customer.key"
-ROT_KEYPAIR ?= "${DEPLOY_DIR_IMAGE}/customer_rot.key"
+ROOT_KEYPAIR ?= "${DEPLOY_DIR_IMAGE}/customer_root.key"
 KEY_CERTIFICATE ?= "${DEPLOY_DIR_IMAGE}/key_certificate.bin"
 CC312_DIR ?= "${STAGING_ETCDIR_NATIVE}/cc312"
 

@@ -1,5 +1,5 @@
 diff --git a/subprojects/gst-plugins-good/sys/v4l2/gstv4l2.c b/subprojects/gst-plugins-good/sys/v4l2/gstv4l2.c
-index ec53bc9e83..c1ec126019 100644
+index ec53bc9..c1ec126 100644
 --- a/subprojects/gst-plugins-good/sys/v4l2/gstv4l2.c
 +++ b/subprojects/gst-plugins-good/sys/v4l2/gstv4l2.c
 @@ -57,6 +57,7 @@
@@ -20,8 +20,37 @@ index ec53bc9e83..c1ec126019 100644
    return ret;
  }
  
+diff --git a/subprojects/gst-plugins-good/sys/v4l2/gstv4l2bufferpool.c b/subprojects/gst-plugins-good/sys/v4l2/gstv4l2bufferpool.c
+index 230ac3f..560b894 100644
+--- a/subprojects/gst-plugins-good/sys/v4l2/gstv4l2bufferpool.c
++++ b/subprojects/gst-plugins-good/sys/v4l2/gstv4l2bufferpool.c
+@@ -822,6 +822,8 @@ gst_v4l2_buffer_pool_start (GstBufferPool * bpool)
+       can_allocate = GST_V4L2_ALLOCATOR_CAN_ALLOCATE (pool->vallocator, MMAP);
+ 
+       /* first, lets request buffers, and see how many we can get: */
++      // We are adding += 3 because the min value that we get from the ISP is not enough
++      min_buffers += 3;
+       GST_DEBUG_OBJECT (pool, "requesting %d MMAP buffers", min_buffers);
+ 
+       count = gst_v4l2_allocator_start (pool->vallocator, min_buffers,
+diff --git a/subprojects/gst-plugins-good/sys/v4l2/gstv4l2object.c b/subprojects/gst-plugins-good/sys/v4l2/gstv4l2object.c
+index 491ce22..a6b4de5 100644
+--- a/subprojects/gst-plugins-good/sys/v4l2/gstv4l2object.c
++++ b/subprojects/gst-plugins-good/sys/v4l2/gstv4l2object.c
+@@ -4934,8 +4934,10 @@ gst_v4l2_object_decide_allocation (GstV4l2Object * obj, GstQuery * query)
+      * buffers and enable copy threshold */
+     if (!update) {
+       own_min += 2;
++
++      // In Hailo we enforce zero copy
+       gst_v4l2_buffer_pool_copy_at_threshold (GST_V4L2_BUFFER_POOL (pool),
+-          TRUE);
++          FALSE);
+     } else {
+       gst_v4l2_buffer_pool_copy_at_threshold (GST_V4L2_BUFFER_POOL (pool),
+           FALSE);
 diff --git a/subprojects/gst-plugins-good/sys/v4l2/gstv4l2src.c b/subprojects/gst-plugins-good/sys/v4l2/gstv4l2src.c
-index d00f7a80dc..3471c041a8 100644
+index d00f7a8..3471c04 100644
 --- a/subprojects/gst-plugins-good/sys/v4l2/gstv4l2src.c
 +++ b/subprojects/gst-plugins-good/sys/v4l2/gstv4l2src.c
 @@ -50,6 +50,8 @@
@@ -323,7 +352,7 @@ index d00f7a80dc..3471c041a8 100644
    duration = obj->duration;
  
 diff --git a/subprojects/gst-plugins-good/sys/v4l2/gstv4l2src.h b/subprojects/gst-plugins-good/sys/v4l2/gstv4l2src.h
-index 39a5baf8ff..30f708d6cb 100644
+index 39a5baf..30f708d 100644
 --- a/subprojects/gst-plugins-good/sys/v4l2/gstv4l2src.h
 +++ b/subprojects/gst-plugins-good/sys/v4l2/gstv4l2src.h
 @@ -62,6 +62,11 @@ struct _GstV4l2Src
@@ -340,7 +369,7 @@ index 39a5baf8ff..30f708d6cb 100644
  
 diff --git a/subprojects/gst-plugins-good/sys/v4l2/hailo_v4l2/hailo_v4l2.h b/subprojects/gst-plugins-good/sys/v4l2/hailo_v4l2/hailo_v4l2.h
 new file mode 100644
-index 0000000000..917bd40726
+index 0000000..917bd40
 --- /dev/null
 +++ b/subprojects/gst-plugins-good/sys/v4l2/hailo_v4l2/hailo_v4l2.h
 @@ -0,0 +1,30 @@
@@ -377,7 +406,7 @@ index 0000000000..917bd40726
 \ No newline at end of file
 diff --git a/subprojects/gst-plugins-good/sys/v4l2/hailo_v4l2/hailo_v4l2_meta.c b/subprojects/gst-plugins-good/sys/v4l2/hailo_v4l2/hailo_v4l2_meta.c
 new file mode 100644
-index 0000000000..09d2766217
+index 0000000..09d2766
 --- /dev/null
 +++ b/subprojects/gst-plugins-good/sys/v4l2/hailo_v4l2/hailo_v4l2_meta.c
 @@ -0,0 +1,190 @@
@@ -574,7 +603,7 @@ index 0000000000..09d2766217
 \ No newline at end of file
 diff --git a/subprojects/gst-plugins-good/sys/v4l2/hailo_v4l2/hailo_v4l2_meta.h b/subprojects/gst-plugins-good/sys/v4l2/hailo_v4l2/hailo_v4l2_meta.h
 new file mode 100644
-index 0000000000..f52c917952
+index 0000000..f52c917
 --- /dev/null
 +++ b/subprojects/gst-plugins-good/sys/v4l2/hailo_v4l2/hailo_v4l2_meta.h
 @@ -0,0 +1,58 @@
@@ -638,7 +667,7 @@ index 0000000000..f52c917952
 +G_END_DECLS
 \ No newline at end of file
 diff --git a/subprojects/gst-plugins-good/sys/v4l2/meson.build b/subprojects/gst-plugins-good/sys/v4l2/meson.build
-index 65f551fb64..9391faf05a 100644
+index 65f551f..9391faf 100644
 --- a/subprojects/gst-plugins-good/sys/v4l2/meson.build
 +++ b/subprojects/gst-plugins-good/sys/v4l2/meson.build
 @@ -33,7 +33,8 @@ v4l2_sources = [

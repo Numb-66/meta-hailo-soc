@@ -13,7 +13,7 @@ script_dir=$(realpath $(dirname "$0"))
 
 # parse arguments
 cc_runtime_path=$(realpath $1)
-rot_keypair=$(realpath $2)
+root_keypair=$(realpath $2)
 content_pubkey=$(realpath $3)
 output_certificate_name=$(realpath $4)
 
@@ -23,29 +23,29 @@ certificate_config_file_full_hbk="${temporary_directory}/certificate_config_full
 certificate_config_file_hbk0="${temporary_directory}/certificate_config_hbk0.txt"
 certificate_filename_full_hbk="${temporary_directory}/full_hbk_cert.bin"
 certificate_filename_hbk0="${temporary_directory}/hbk0_cert.bin"
-rot_pubkey_copy="${temporary_directory}/rot_pubkey_copy.pem"
+root_pubkey_copy="${temporary_directory}/root_pubkey_copy.pem"
 content_pubkey_copy="${temporary_directory}/content_pubkey_copy.pem"
 
 # change to the temporary directory, so that we can cleanup the temporary files easily
 cd ${temporary_directory}
 
 # extract the public key from the root-of-trust keypair
-openssl rsa -in ${rot_keypair} -pubout -out ${rot_pubkey_copy}
+openssl rsa -in ${root_keypair} -pubout -out ${root_pubkey_copy}
 
 # extract the public key from the content pubkey (make sure we compare two files produced by the same openssl)
 openssl rsa -pubin -in ${content_pubkey} -pubout -out ${content_pubkey_copy}
 
 # verify that the root-of-trust public key and content public key are different
-if cmp -s ${rot_pubkey_copy} ${content_pubkey_copy}; then
+if cmp -s ${root_pubkey_copy} ${content_pubkey_copy}; then
     echo "Error: Root-of-trust public key and content public key are the same."
     echo "       Using the same key as root-of-trust and content key is a security issue. You must use different keys."
     exit 1
 fi
 
 # generate certificate configuration files for full HBK and HBK0 from template
-rot_keypair=${rot_keypair} content_pubkey=${content_pubkey} cert_package_name=${certificate_filename_full_hbk} hbk_id=2 envsubst \
+root_keypair=${root_keypair} content_pubkey=${content_pubkey} cert_package_name=${certificate_filename_full_hbk} hbk_id=2 envsubst \
     < ${script_dir}/hailo15_key_certificate_config_template.txt > ${certificate_config_file_full_hbk}
-rot_keypair=${rot_keypair} content_pubkey=${content_pubkey} cert_package_name=${certificate_filename_hbk0} hbk_id=0 envsubst \
+root_keypair=${root_keypair} content_pubkey=${content_pubkey} cert_package_name=${certificate_filename_hbk0} hbk_id=0 envsubst \
     < ${script_dir}/hailo15_key_certificate_config_template.txt > ${certificate_config_file_hbk0}
 
 # sign the binary using the cryptocell library

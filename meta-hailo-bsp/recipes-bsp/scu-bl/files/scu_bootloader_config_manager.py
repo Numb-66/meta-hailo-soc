@@ -144,7 +144,7 @@ def create_scu_bl_config_bin_file(jsonFileName, binFile):
 
     binary_data = ctypes.string_at(ctypes.addressof(scu_bl_config_c_struct) + ctypes.sizeof(ctypes.c_uint32), 
                                      ctypes.sizeof(scu_bl_config_c_struct) - ctypes.sizeof(ctypes.c_uint32))
-
+    
     # number of 32bit words in scu_bl_config - excluding the CRC field
     words_num = len(binary_data) // 4
 

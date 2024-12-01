@@ -19,14 +19,16 @@ WKS_FILE = "sd.wks.in"
 # Default SD fixed size is 32M for production, for development we use 64M
 SD_FIXED_SIZE = "32"
 
-IMAGE_BOOT_FILES += "fitImage u-boot-tfa.itb"
+IMAGE_BOOT_FILES += "fitImage"
+IMAGE_BOOT_FILES += "${@bb.utils.contains("MACHINE_FEATURES", "falcon_mode", "", "u-boot-tfa.itb", d)}"
 
 KERNEL_IMAGETYPE = "fitImage"
 KERNEL_CLASSES += "kernel-fitimage"
 KERNEL_ALT_IMAGETYPE = "vmlinux"
 
-WKS_FILE_DEPENDS += " linux-yocto-hailo u-boot-tfa-image"
-EXTRA_IMAGEDEPENDS += " u-boot-tfa-image"
+WKS_FILE_DEPENDS += "linux-yocto-hailo"
+WKS_FILE_DEPENDS += "${@bb.utils.contains("MACHINE_FEATURES", "falcon_mode", "", "u-boot-tfa-image", d)}"
+EXTRA_IMAGEDEPENDS += "${@bb.utils.contains("MACHINE_FEATURES", "falcon_mode", "", "u-boot-tfa-image", d)}"
 UBOOT_ELF = "u-boot"
 
 # This is the kernel load address and entry point - which are the same address in our case.
@@ -38,6 +40,7 @@ UBOOT_ELF = "u-boot"
 # and is smaller than that.
 UBOOT_LOADADDRESS="0x80200000"
 UBOOT_ENTRYPOINT="0x80200000"
+UBOOT_DTB_LOADADDRESS="0x84800000"
 
 SERIAL_CONSOLES = "115200;ttyS1"
 
@@ -82,3 +85,8 @@ RECOVERY_FW_UNSIGNED_BINARY_NAME = "${RECOVERY_FW_MACHINE}_${RECOVERY_FW_SUFFIX}
 RECOVERY_FW_CUSTOMER_SIGNED_BINARY_NAME = "${RECOVERY_FW_MACHINE}_${RECOVERY_FW_SUFFIX}.${RECOVERY_FW_CUSTOMER_SIGNED_BINARY_EXTENSION}"
 
 HAILO_TARGET ?= "core-image-minimal"
+
+# make sure fitImage and u-boot-tfa.itb devicetree blobs are aligned to 64 bytes
+# this is done only in the call to mkimage that does the signing, not in the call to mkimage that creates the image
+# otherwise the image verification will fail
+UBOOT_MKIMAGE_SIGN_ARGS:append = " -E -B 0x40"
