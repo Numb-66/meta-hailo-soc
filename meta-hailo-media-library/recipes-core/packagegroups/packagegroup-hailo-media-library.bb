@@ -36,6 +36,5 @@ RDEPENDS:${PN}-dev-pkg = "\
     htop \
     tmux \
     vim \
-    x264 \
-    medialib-vision-app" 
+    x264"
 
