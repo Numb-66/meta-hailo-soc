@@ -7,7 +7,7 @@ inherit hailo-cc312-sign
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://../LICENSE;md5=263ee034adc02556d59ab1ebdaea2cda"
 
-BASE_URI = "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.5.2/scu-bl"
+BASE_URI = "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.6.0/scu-bl"
 BL = "hailo15_scu_bl.bin"
 BL_UNSIGNED = "${SCU_BL_UNSIGNED_BINARY_NAME}"
 BL_CUSTOMER_SIGNED = "${SCU_BL_CUSTOMER_SIGNED_BINARY_NAME}"
@@ -70,6 +70,8 @@ do_deploy() {
   for json in ${CONFIG_JSONS}; do
     install -m 644 -D ${WORKDIR}/"${json%.json}.bin" ${DEPLOYDIR}
   done
+
+  install -m 644 -D ${WORKDIR}/${BL_UNSIGNED} ${DEPLOYDIR}/${BL_UNSIGNED}
 }
 
 addtask deploy after do_install

@@ -7,7 +7,7 @@ inherit hailo-cc312-sign
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://../LICENSE;md5=263ee034adc02556d59ab1ebdaea2cda"
 
-BASE_URI = "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.5.2/recovery-fw"
+BASE_URI = "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.6.0/recovery-fw"
 FW = "hailo15_uart_recovery_fw.bin"
 FW_UNSIGNED = "${RECOVERY_FW_UNSIGNED_BINARY_NAME}"
 FW_CUSTOMER_SIGNED = "${RECOVERY_FW_CUSTOMER_SIGNED_BINARY_NAME}"
@@ -35,6 +35,8 @@ do_deploy() {
     install -m 644 -D ${WORKDIR}/${FW_CUSTOMER_SIGNED} ${DEPLOYDIR}/${FW_CUSTOMER_SIGNED}
     ln -s -r ${DEPLOYDIR}/${FW_CUSTOMER_SIGNED} ${DEPLOYDIR}/${FW}
   fi
+
+  install -m 644 -D ${WORKDIR}/${FW_UNSIGNED} ${DEPLOYDIR}/${FW_UNSIGNED}
 }
 
 # Allows a creation of a package without files. If files are added, this attribute should be removed.

@@ -7,4 +7,5 @@ target:
 local_conf_header:
   hailo-target: |
     HAILO_TARGET = "core-image-hailo"
+    DISTRO_FEATURES:append = " hailo-core"
   

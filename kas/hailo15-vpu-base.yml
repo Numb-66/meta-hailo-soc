@@ -19,11 +19,10 @@ local_conf_header:
 repos:
   meta-hailo:
     url: "https://github.com/hailo-ai/meta-hailo.git"
-    refspec: kirkstone-vpu-v1.5.2
+    refspec: kirkstone
     layers:
       meta-hailo-libhailort:
       meta-hailo-vpu:
-      meta-hailo-tappas:
   meta-hailo-dsp:
     layers:
         meta-hailo-dsp:
@@ -40,3 +39,6 @@ repos:
   meta-hailo-media-library:
     layers:
       meta-hailo-media-library:
+  meta-hailo-tappas:
+    layers:
+      meta-hailo-tappas:

@@ -7,7 +7,7 @@ inherit hailo-cc312-sign
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://../LICENSE;md5=263ee034adc02556d59ab1ebdaea2cda"
 
-BASE_URI = "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.5.2/scu-fw"
+BASE_URI = "https://hailo-hailort.s3.eu-west-2.amazonaws.com/Hailo15/1.6.0/scu-fw"
 FW = "hailo15_scu_fw.bin"
 FW_UNSIGNED = "${SCU_FW_UNSIGNED_BINARY_NAME}"
 FW_CUSTOMER_SIGNED = "${SCU_FW_CUSTOMER_SIGNED_BINARY_NAME}"
@@ -17,8 +17,8 @@ SRC_URI = "${BASE_URI}/${FW};name=fw \
            ${BASE_URI}/${FW_UNSIGNED};name=fw_unsigned \
            ${BASE_URI}/${LICENSE_FILE};name=lic"
 
-SRC_URI[fw.sha256sum] = "a9440920a78ea16f1b6397fdbbfebba48d040a44fb926fdf11c4474609baaa94"
-SRC_URI[fw_unsigned.sha256sum] = "e1dda1375931726181539b60757492e4fbe5e3588f64fe93c9aaf6ed665bfc26"
+SRC_URI[fw.sha256sum] = "b168df8b8c45c561d0b0a32e7922bf7fa0b08a571cb06fd98a5cf67649c29d15"
+SRC_URI[fw_unsigned.sha256sum] = "2b256d1783f76d2a7ddd0a2b47f710f84fcbc0b67febdcfc95c4d464f4ab8362"
 SRC_URI[lic.sha256sum] = "ca96445e6e33ae0a82170ea847b0925c864492f0cbb6342d42c54fd647133608"
 
 do_sign() {
@@ -37,6 +37,8 @@ do_deploy() {
 	  ln -s -r ${DEPLOYDIR}/${FW_CUSTOMER_SIGNED} ${DEPLOYDIR}/${FW}
   fi
 	ln -s -r ${DEPLOYDIR}/${FW} ${DEPLOYDIR}/${FW_LINK}
+
+  install -m 644 -D ${WORKDIR}/${FW_UNSIGNED} ${DEPLOYDIR}/${FW_UNSIGNED}
 }
 
 addtask deploy after do_sign

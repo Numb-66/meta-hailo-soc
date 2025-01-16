@@ -9,8 +9,10 @@ PACKAGEGROUP_DISABLE_COMPLEMENTARY = "1"
 PACKAGES = "packagegroup-hailo-imaging \
             packagegroup-hailo-imaging-dev-pkg"
 
+IMAGING_EXTRA_RDEPENDS ?= ""
 RDEPENDS:${PN} = "\
-    imaging-sub-system"
+    imaging-sub-system \
+    ${IMAGING_EXTRA_RDEPENDS}"
 
 RDEPENDS:${PN}-dev-pkg = "\
     packagegroup-hailo-imaging \

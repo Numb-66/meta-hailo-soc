@@ -5,8 +5,8 @@ DESCRIPTION = "Media Library Encoder OSD API \
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=031eb3f48c82f13ff6cdb783af612501"
 
-SRC_URI = "git://git@github.com/hailo-ai/hailo-media-library.git;protocol=https;branch=1.5.2"
-SRCREV = "f0f6e199bc5613caf13bda7112e271d08df3a22d"
+SRC_URI = "git://git@github.com/hailo-ai/hailo-media-library.git;protocol=https;branch=1.6.0"
+SRCREV = "cf22ce7d0088c2cec5538e78975f607fdb569a3a"
 
 inherit media-library-base
 

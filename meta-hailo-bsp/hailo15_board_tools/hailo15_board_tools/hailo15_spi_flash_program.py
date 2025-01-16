@@ -138,7 +138,7 @@ def main():
 
     run(args.scu_firmware, args.scu_bootloader, args.scu_bootloader_config, args.bootloader, args.bootloader_env,
         args.uboot_device_tree, args.customer_certificate, args.uboot_tfa,  args.verify, args.uart_load,
-        args.serial_device_name, args.b_image, flash_mac_addr=args.flash_mac_addr)
+        args.serial_device_name, is_b_image=args.b_image, flash_mac_addr=args.flash_mac_addr)
 
 
 if __name__ == '__main__':
