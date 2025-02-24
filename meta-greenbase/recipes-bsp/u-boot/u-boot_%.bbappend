@@ -1,2 +1,2 @@
-SRCREV="81f801935e9e8b5f6bc9ac6a8c67ab2eb1b311d8"
+SRCREV="391f5df928f6531cc4e9f00699cc561d55ee3adc"
 SRC_URI="git://github.com/Numb-66/hailo-u-boot.git;protocol=https;branch=1.6.1"
