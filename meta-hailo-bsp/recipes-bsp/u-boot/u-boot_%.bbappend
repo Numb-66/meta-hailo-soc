@@ -7,7 +7,7 @@ require u-boot-hailo.inc
 inherit hailo-cc312-sign
 
 SRC_URI:append = " file://fw_env.config"
-SRC_URI:append = "${@bb.utils.contains('MACHINE_FEATURES', 'ddr_ecc_en', ' file://cfg/hailo15_ddr_ecc_enable.cfg', '', d)}"
+SRC_URI:append = "${@bb.utils.contains('MACHINE_FEATURES', 'ddr_ecc_dis', ' file://cfg/hailo15_ddr_ecc_disable.cfg', '', d)}"
 SRC_URI:append = "${@bb.utils.contains('MACHINE_FEATURES', 'emmc_8bit', ' file://cfg/hailo15_sdio1_8bit.cfg', '', d)}"
 SRC_URI:append = "${@bb.utils.contains('MACHINE_FEATURES', 'coresight', ' file://cfg/coresight.cfg', '', d)}"
 UBOOT_ENV_SIZE = "0x4000"
