@@ -175,7 +175,7 @@ RDEPENDS:${PN}-spi-dev-pkg:hailo15l = "\
     "
 
 RDEPENDS:${PN}-ddr = "\
-    ${@bb.utils.contains('MACHINE_FEATURES', 'ddr_ecc_dis', 'edac-utils', '', d)} \
+    ${@bb.utils.contains('MACHINE_FEATURES', 'ddr_ecc_en', 'edac-utils', '', d)} \
     "
 
 RDEPENDS:${PN}-ddr-dev-pkg = "\
