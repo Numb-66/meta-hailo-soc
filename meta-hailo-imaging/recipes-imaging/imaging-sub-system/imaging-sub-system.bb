@@ -26,7 +26,7 @@ install_dist() {
 }
 
 install_misc() {
-	install -m 0755 -D  ${S}/mediacontrol/server/media_server_cfg*.json ${D}${bindir}
+	install -m 0755 -D  ${S}/mediacontrol/server/json_files/media_server_cfg*.json ${D}${bindir}
 	
 	install -d ${D}${includedir}/imaging
 	cp ${S}/units/hailo/hdr_lib/src/*.hpp ${D}${includedir}/imaging
@@ -37,6 +37,7 @@ link_drivers() {
 	ln -s -r ${D}/lib/libHAILO_IMX675.so ${D}${bindir}/HAILO_IMX675.drv
 	ln -s -r ${D}/lib/libHAILO_IMX678.so ${D}${bindir}/HAILO_IMX678.drv
 	ln -s -r ${D}/lib/libHAILO_IMX715.so ${D}${bindir}/HAILO_IMX715.drv
+	ln -s -r ${D}/lib/libHAILO_IMX_DUMMY.so ${D}${bindir}/HAILO_IMX_DUMMY.drv
 }
 
 do_install() {

@@ -31,7 +31,7 @@ python set_reqs_file() {
 IS_H15 = "${@ 'true' if 'hailo15' in d.getVar('MACHINE') else 'false'}"
 INSTALL_LPR = "false"
 
-DEPENDS += " cxxopts"
+DEPENDS += " cxxopts reference-camera-api"
 # meson configuration
 EXTRA_OEMESON += " \
         -Dinstall_lpr='${INSTALL_LPR}' \
@@ -42,6 +42,7 @@ do_install:append() {
     if [ '${IS_H15}' = 'true' ]; then
         install -d ${ROOTFS_APPS_DIR}/encoder_pipelines_new_api/configs/
         install -m 0755 ${S}/apps/hailo15/encoder_pipelines_new_api/*.json ${ROOTFS_APPS_DIR}/encoder_pipelines_new_api/configs/
+        install -m 0755 ${HAILO15_DIR}/clean_symlinks_config_isp.sh ${ROOTFS_APPS_DIR}/clean_symlinks_config_isp.sh
     fi
 }
 
