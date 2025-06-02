@@ -8,4 +8,4 @@ local_conf_header:
   hailo-target: |
     HAILO_TARGET = "core-image-minimal"
     DISTRO_FEATURES:append = " hailo-dev-pkg"
-	BB_NUMBER_THREADS = "8"
+    BB_NUMBER_THREADS = "8"
