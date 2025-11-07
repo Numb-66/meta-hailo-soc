@@ -5,13 +5,8 @@ DESCRIPTION = "Media Library GStreamer plugin \
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=031eb3f48c82f13ff6cdb783af612501"
 
-<<<<<<<< HEAD:meta-hailo-media-library/recipes-gstreamer/libgstmedialib/libgstmedialib_1.8.1.bb
-SRC_URI = "git://git@github.com/hailo-ai/hailo-media-library.git;protocol=https;branch=1.8.1"
-SRCREV = "53e9105aa7c55c08cc92abe6120130fa69195f5d"
-========
 SRC_URI = "git://git@github.com/hailo-ai/hailo-media-library.git;protocol=https;branch=1.9.0"
 SRCREV = "688177780d8e758ed459e5994e90488b4958a9f9"
->>>>>>>> upstream/1.9.0:meta-hailo-media-library/recipes-gstreamer/libgstmedialib/libgstmedialib_1.9.0.bb
 
 ROOTFS_HOME_DIR = "/home/root"
 
