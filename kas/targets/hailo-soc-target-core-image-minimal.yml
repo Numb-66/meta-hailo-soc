@@ -10,4 +10,4 @@ target:
 local_conf_header:
   hailo-target: |
     HAILO_TARGET = "core-image-minimal"
-	BB_NUMBER_THREADS = "8"
+    BB_NUMBER_THREADS = "8"
