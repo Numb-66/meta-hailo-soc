@@ -8,9 +8,9 @@ inherit deploy hailo-common-utils
 LINUX_VERSION = "5.15.32"
 PV = "${LINUX_VERSION}"
 
-LINUX_YOCTO_HAILO_URI ??= "git@github.com/numb-66/linux-yocto-hailo.git"
-LINUX_YOCTO_HAILO_BRANCH ??= "1.9.1-wn"
-LINUX_YOCTO_HAILO_SRCREV ??= "c1a309b96cf2173b278951bb8e71f121726d5358"
+LINUX_YOCTO_HAILO_URI ??= "git@github.com/Numb-66/linux-yocto-hailo.git"
+LINUX_YOCTO_HAILO_BRANCH ??= "1.9.1-wn-fix"
+LINUX_YOCTO_HAILO_SRCREV ??= "04df8192a338c0bad2b3f1a629555ba14b9f26b5"
 LINUX_YOCTO_HAILO_BOARD_VENDOR ?= "hailo"
 ADD_ITS_TO_FITIMAGE ?= "yes"
 
