@@ -10,7 +10,7 @@ PV = "${LINUX_VERSION}"
 
 LINUX_YOCTO_HAILO_URI ??= "git@github.com/Numb-66/linux-yocto-hailo.git"
 LINUX_YOCTO_HAILO_BRANCH ??= "1.9.1-wn-fix"
-LINUX_YOCTO_HAILO_SRCREV ??= "5669148a4ffe5efb5c4534ac3bdd0dee6599ff8b"
+LINUX_YOCTO_HAILO_SRCREV ??= "859481a4eba80ad32f7bcb19a1104681fbb2d870"
 LINUX_YOCTO_HAILO_BOARD_VENDOR ?= "hailo"
 ADD_ITS_TO_FITIMAGE ?= "yes"
 
@@ -22,6 +22,9 @@ FILESEXTRAPATHS:prepend:hailo10-m2 := "${THISDIR}/linux-yocto-hailo/tiny_defconf
 SRC_URI = "git://${LINUX_YOCTO_HAILO_URI};protocol=https;branch=${KBRANCH} \
            file://defconfig \
            file://cfg/;destsuffix=cfg;type=kmeta"
+
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
+SRC_URI += "file://dynamic-debug.cfg"
 
 # configurations for debug
 # KASAN/UBSAN/checkers would degrade performance, so they should be used only for test build for bugchecking
