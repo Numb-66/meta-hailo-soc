@@ -10,7 +10,7 @@ PV = "${LINUX_VERSION}"
 
 LINUX_YOCTO_HAILO_URI ??= "git@github.com/Numb-66/linux-yocto-hailo.git"
 LINUX_YOCTO_HAILO_BRANCH ??= "1.9.1-wn-fix"
-LINUX_YOCTO_HAILO_SRCREV ??= "db094cff5fe26dda1ff3b0e3b26a4d0adcec5ef3"
+LINUX_YOCTO_HAILO_SRCREV ??= "7580fa51ba7312613f528f50af7ed6ada0b970f3"
 LINUX_YOCTO_HAILO_BOARD_VENDOR ?= "hailo"
 ADD_ITS_TO_FITIMAGE ?= "yes"
 
