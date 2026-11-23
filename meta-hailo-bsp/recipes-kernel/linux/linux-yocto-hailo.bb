@@ -10,7 +10,7 @@ PV = "${LINUX_VERSION}"
 
 LINUX_YOCTO_HAILO_URI ??= "git@github.com/Numb-66/linux-yocto-hailo.git"
 LINUX_YOCTO_HAILO_BRANCH ??= "1.9.1-wn-fix"
-LINUX_YOCTO_HAILO_SRCREV ??= "7580fa51ba7312613f528f50af7ed6ada0b970f3"
+LINUX_YOCTO_HAILO_SRCREV ??= "3222057d353b66a176ceced42b086d329657de3f"
 LINUX_YOCTO_HAILO_BOARD_VENDOR ?= "hailo"
 ADD_ITS_TO_FITIMAGE ?= "yes"
 
@@ -40,6 +40,7 @@ SRC_URI:append:hailo15l = " file://cfg/hailo-i2s-warrper.cfg"
 SRC_URI:append:hailo15l = " file://cfg/cma-non-reusable.cfg"
 SRC_URI:append:hailo15-sbc-rev3 = " file://cfg/cma-non-reusable.cfg"
 SRC_URI:append:hailo15-sbc-rev3-1 = " file://cfg/cma-non-reusable.cfg"
+SRC_URI:append:hailo15-wasno-v1r1 = " file://cfg/cma-non-reusable.cfg"
 SRC_URI:append:hailo15l-sbc = " file://cfg/hailo15l-sbc.cfg"
 
 SDIO0_POSTFIX = "${@bb.utils.contains('MACHINE_FEATURES', 'sdio0', '-sdio0', '', d)}"
